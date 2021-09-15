@@ -1,0 +1,7 @@
+C:\apprenticeship\supportBank\supportbank\supportbank\bin\Debug\supportbank.exe.config
+C:\apprenticeship\supportBank\supportbank\supportbank\bin\Debug\supportbank.exe
+C:\apprenticeship\supportBank\supportbank\supportbank\bin\Debug\supportbank.pdb
+C:\apprenticeship\supportBank\supportbank\supportbank\obj\Debug\supportbank.csprojAssemblyReference.cache
+C:\apprenticeship\supportBank\supportbank\supportbank\obj\Debug\supportbank.csproj.CoreCompileInputs.cache
+C:\apprenticeship\supportBank\supportbank\supportbank\obj\Debug\supportbank.exe
+C:\apprenticeship\supportBank\supportbank\supportbank\obj\Debug\supportbank.pdb
