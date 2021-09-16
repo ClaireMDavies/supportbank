@@ -9,42 +9,82 @@ namespace supportbank
 {
     class Program
     {
+        static Dictionary<string, Account> _accounts = new Dictionary<string, Account>();
+
+         public static void ListAll()
+        {
+            foreach (var keyValuePair in  _accounts)
+                {
+                var account = keyValuePair.Value;
+                if (account.Balance > 0)
+                {
+                    Console.WriteLine($"{account.Name} is owed £{account.Balance}");
+                }
+                else
+                {
+                    Console.WriteLine(($"{account.Name} owes £{-account.Balance}"));
+                }
+            }
+        }
         static void Main(string[] args)
         {
+            
+
             // read lines from the file
-            string path = "C:\\apprenticeship\\supportBank\\supportbank\\supportbank\\Transactions2014.csv";
-            string[] transactionData = File.ReadAllLines(path);
-
-            
-
-            foreach ( string line in transactionData)
-            {
-                
-                string date = line.Split(',')[0];
-                string from = line.Split(',')[1];
-                string to = line.Split(',')[2];
-                string narrative = line.Split(',')[3];
-                string amount = line.Split(',')[4];
-
-                Console.WriteLine($"date: {date}  from:{from} to:{to} narrative:{narrative}  amount:{amount}");
-            
-
-            }
-            Console.ReadLine();
-
+            string path = "C:\\apprenticeship\\supportBank\\supportbank\\supportbank\\Transactions2014.csv"; 
             
             // create a list / array / dictionary of Transactions
+            string[] transactionRecords = File.ReadAllLines(path);
 
-            // for each line in linesArray
-                // create a Transaction object
-                // split up the line to find the date, amount, etc.
-                // store those values in the object
-                // add the object to our list / array / etc
 
-            // for each transaction in the list / array / etc
-                // write the transaction to the console
+            // for each line in transactionsData
+            foreach (string record in transactionRecords.Skip(1))
+            {
+                
+                    string[] transactionFields = record.Split(',');
 
+                    string date = transactionFields[0];
+                    string fromName = transactionFields[1];
+                    string toName = transactionFields[2];
+                    string why = transactionFields[3];
+                    float amount = float.Parse(transactionFields[4]);
+
+
+
+                //Console.WriteLine($"date: {date}  from:{fromName} to:{toName} narrative:{why}  amount:{amount}");
+
+                Account fromAccount = GetAccountByName(fromName);
+                fromAccount.WithdrawFunds(date, toName, amount, why);
+
+                Account toAccount = GetAccountByName(toName);
+                toAccount.AddFunds(date, fromName, amount, why);
+
+
+            }
+
+
+            //call listall method
+            ListAll();
+            Console.ReadLine();
 
         }
+        private static Account GetAccountByName(string accountName)
+        {
+            if (_accounts.ContainsKey(accountName))
+            {
+                return _accounts[accountName];
+            }
+            else
+            {
+                Account newAccount = new Account();
+                newAccount.Name = accountName;
+                _accounts.Add(accountName, newAccount);
+                return newAccount;
+
+                
+            }
+        }
+
+
     }
 }
