@@ -11,7 +11,10 @@ namespace supportbank
     {
         static Dictionary<string, Account> _accounts = new Dictionary<string, Account>();
 
-         public static void ListAll()
+        //
+
+        //function to create a list of all accounts and whether money is owed or not
+        public static void ListAll()
         {
             foreach (var keyValuePair in  _accounts)
                 {
@@ -22,10 +25,53 @@ namespace supportbank
                 }
                 else
                 {
-                    Console.WriteLine(($"{account.Name} owes £{-account.Balance}"));
+                    Console.WriteLine($"{account.Name} owes £{-account.Balance}");
                 }
             }
         }
+
+        public static void ListAccount(string accountName)
+        {
+           
+            if (_accounts.ContainsKey(accountName))
+            {
+                var currentAccount = _accounts[accountName];
+                var transactions = currentAccount.Transactions;
+
+                Console.WriteLine($"Account Name: {currentAccount.Name}");
+                foreach (var transaction in transactions)
+                {
+                  
+                    Console.WriteLine($"{transaction.Date}: {transaction.FromName} paid {transaction.ToName} {transaction.Amount} for {transaction.Narrative}");
+
+                }
+                    
+            }
+            else
+            {
+                Console.WriteLine("no account of this name exists");
+            }
+        }
+
+        public static void CommandLineInput()
+        {
+            Console.WriteLine("Write 'List All' for all accounts, or the name of the account to view");
+            string command = Console.ReadLine();
+
+
+            if (command == "List All")
+            {
+                ListAll();
+                Console.ReadLine();
+            }
+            else
+            {
+                ListAccount(command);
+                Console.ReadLine();
+            }
+
+        }
+
         static void Main(string[] args)
         {
             
@@ -37,7 +83,7 @@ namespace supportbank
             string[] transactionRecords = File.ReadAllLines(path);
 
 
-            // for each line in transactionsData
+            // for each line in transactionsRecords
             foreach (string record in transactionRecords.Skip(1))
             {
                 
@@ -51,23 +97,26 @@ namespace supportbank
 
 
 
-                //Console.WriteLine($"date: {date}  from:{fromName} to:{toName} narrative:{why}  amount:{amount}");
-
+                
+                //writing info from csv file to account
                 Account fromAccount = GetAccountByName(fromName);
-                fromAccount.WithdrawFunds(date, toName, amount, why);
+                fromAccount.WithdrawFunds(date, fromName, toName, amount, why);
 
                 Account toAccount = GetAccountByName(toName);
-                toAccount.AddFunds(date, fromName, amount, why);
+                toAccount.AddFunds(date, fromName, toName, amount, why);
 
 
             }
 
 
-            //call listall method
-            ListAll();
-            Console.ReadLine();
+            //create a command line input  
+            CommandLineInput();
+           
+            
 
         }
+        
+        //Checking if account name exists, and if it doesn't creating account in dictionary
         private static Account GetAccountByName(string accountName)
         {
             if (_accounts.ContainsKey(accountName))
